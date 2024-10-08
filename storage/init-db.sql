@@ -1,0 +1,19 @@
+CREATE TABLE users (
+    username TEXT PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    content TEXT NOT NULL CHECK (LENGTH(content) <= 400),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE
+);
+
+CREATE TABLE likes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    message_id INTEGER NOT NULL,
+    username TEXT NOT NULL,
+    FOREIGN KEY (message_id) REFERENCES messages (id) ON DELETE CASCADE,
+    FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE
+);
