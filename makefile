@@ -1,12 +1,16 @@
-init-db:
-	sqlite3 storage/database.db < storage/init.sql
+DB_PATH = ./storage/db.sql
+SQL_FILE = ./storage/init-db.sql
 
-recreate-db:
-	rm storage/database.db
-	touch storage/database.db
+.PHONY: init-db
+init-db: $(DB_PATH)
 
-create-db:
-	touch storage/database.db
+$(DB_PATH): $(SQL_FILE)
+	@mkdir -p $(dir $(DB_PATH))
+	@sqlite3 $(DB_PATH) < $(SQL_FILE)
+	@echo "Database initialized at $(DB_PATH)"
+
+run-users: 
+	cd services/users && go run ./cmd/users
 
 run-likes:
 	cd services/likes && go run cmd/server.go
