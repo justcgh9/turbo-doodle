@@ -1,9 +1,15 @@
 ## Likes service
 
-### Launch
+### Run
 ```
 make run-likes
 ```
+## Api gateway
+### Run
+```
+make run-nginx
+```
+
 ## Database
 ### Initialize a sqlite database
 ```
