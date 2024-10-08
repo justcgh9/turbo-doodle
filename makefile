@@ -14,3 +14,10 @@ run-users:
 
 run-likes:
 	cd services/likes && go run cmd/server.go
+
+run-nginx:
+	docker run --name nginx --rm \
+	-p 80:80 \
+	-v "$(PWD)"/nginx.conf:/etc/nginx/nginx.conf \
+	--add-host=host.docker.internal:host-gateway \
+	nginx
