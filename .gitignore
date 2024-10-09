@@ -4,3 +4,7 @@ node_modules
 __pycache__
 
 database.db
+
+.idea
+frontend/node_modules
+services/posts/node_modules

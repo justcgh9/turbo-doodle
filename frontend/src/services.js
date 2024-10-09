@@ -1,0 +1,1 @@
+export const POSTS_API = "http://localhost:8081/posts/"
