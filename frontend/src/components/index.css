@@ -1,0 +1,27 @@
+@import url("./css/card.css");
+@import url("./css/homeTitle.css");
+@import url("./css/accountLink.css");
+
+.MyButton {
+    text-decoration: none;
+    border: 2px solid black;
+    border-radius: 10px;
+
+    background-color: black;
+    color: white;
+
+    padding: 15px;
+
+    justify-content: center;
+
+    width: 9rem;
+
+    transition: background-color 0.2s ease-in, border 0.2s ease-in;
+}
+
+.MyButton:hover {
+    background-color: orange;
+    border: 2px solid orange;
+
+    cursor: pointer;
+}
