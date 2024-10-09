@@ -17,7 +17,9 @@ const Home = () => {
     const [post, setPost] = useState({
         title: "",
         content: "",
-        color: ""
+        color: "",
+        id: 0,
+        liked: false
     });
 
     const [likes, setLikes] = useState([]);
@@ -44,10 +46,9 @@ const Home = () => {
         }
     }
 
-    async function retrieveLikes(messageId) {
+    async function retrieveLikes() {
         try {
-            const getURL = `${USERS_API}?username=${user}&messageId=${messageId}`;
-            const response = await fetch(getURL, {
+            const response = await fetch(LIKES_API, {
                 method: "GET",
                 headers: {}
             });
@@ -58,15 +59,39 @@ const Home = () => {
 
             console.log('Response from API:', response);
 
-            const data = await response.text();
+            const data = await response.json();
             console.log('Data from API:', data);
+
+            setLikes(data)
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
     }
 
     async function makeLike(messageId) {
-        // ...
+        try {
+            console.log(user, messageId);
+
+            const response = await fetch(LIKES_API, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: user,
+                    messageId: messageId
+                })
+            });
+
+            if (!response.ok) {
+                console.log(`HTTP error (get)! Status: ${response.status}`);
+            }
+
+            console.log('Like was created');
+            retrieveLikes().then();
+        } catch (error) {
+            console.error('Error creating like:', error);
+        }
     }
 
     async function createPost() {
@@ -132,13 +157,21 @@ const Home = () => {
         setMessage("");
     }
 
-    useEffect(() => {retrievePosts().then()}, [])
+    useEffect(() => {
+        retrievePosts().then();
+    }, [])
+
+    useEffect(() => {
+        if (loggedIn) {
+            retrieveLikes().then();
+        }
+    }, [loggedIn]);
 
     return (
         <div className="homeWrapper">
             <div className="search-input">
                 {openForm ? (
-                   <Post setOpenForm={setOpenForm} post={post}/>
+                   <Post setOpenForm={setOpenForm} post={post} makeLike={makeLike} loggedIn={loggedIn}/>
                 ) : null}
 
                 {loggedIn ? (
@@ -170,10 +203,6 @@ const Home = () => {
                         <ActionButton action={() => {
                             logout();
                         }} title="Log out"/>
-
-                        {/*<ActionButton action={() => {*/}
-                        {/*    retrieveLikes(10).then();*/}
-                        {/*}} title="likes"/>*/}
                     </>
                 ) : (
                     <ActionButton action={() => {
@@ -184,7 +213,13 @@ const Home = () => {
 
 
                 <p>Posts</p>
-                <PostsList posts={posts} setPost={setPost} setOpenForm={setOpenForm}/>
+                <PostsList
+                    posts={posts}
+                    setPost={setPost}
+                    setOpenForm={setOpenForm}
+                    likes={likes}
+                    username={user}
+                />
             </div>
             )
             }

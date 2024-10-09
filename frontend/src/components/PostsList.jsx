@@ -2,7 +2,7 @@ import React from 'react';
 import Card from "./Card.jsx";
 
 const PostsList = (props) => {
-    const { posts, setPost, setOpenForm } = props;
+    const { posts, setPost, setOpenForm, likes, username } = props;
 
     const colorMap = {
         orange: 'FFA500FF',
@@ -34,6 +34,10 @@ const PostsList = (props) => {
                   color={getColor(item.username)}
                   setPost={setPost}
                   setOpenForm={setOpenForm}
+                  id={item.id}
+                  liked={
+                      likes.some(like => like.messageId === item.id && like.username === username)
+                  }
               />
           ))}
       </div>

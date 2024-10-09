@@ -1,6 +1,6 @@
-DROP TABLE users;
-DROP TABLE messages;
-DROP TABLE likes;
+-- DROP TABLE users;
+-- DROP TABLE messages;
+-- DROP TABLE likes;
 
 
 CREATE TABLE IF NOT EXISTS users (

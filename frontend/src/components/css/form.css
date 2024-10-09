@@ -11,6 +11,12 @@
     justify-content: center;
 }
 
-.FormWrapper {
+.likeButton {
+    margin-left: 20vw;
+    margin-top: 2vw;
+}
 
+.likeButton button {
+    background: none;
+    border: 2px solid white;
 }
