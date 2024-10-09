@@ -15,6 +15,12 @@ run-users:
 run-likes:
 	cd services/likes && go run cmd/server.go
 
+run-posts:
+	cd services/posts && npm start
+
+run-frontend:
+	cd frontend && npm start
+
 run-nginx:
 	docker run --name nginx --rm \
 	-p 80:80 \

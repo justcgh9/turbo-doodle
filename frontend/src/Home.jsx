@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import PostsList from "./components/PostsList.jsx";
 import InputField from "./components/InputField.jsx";
 import ActionButton from "./components/ActionButton.jsx";
-import {POSTS_API} from "./services";
+import {POSTS_API, USERS_API} from "./services";
 
 
 const Home = () => {
@@ -20,7 +20,7 @@ const Home = () => {
             });
 
             if (!response.ok) {
-                console.log(`HTTP error! Status: ${response.status}`);
+                console.log(`HTTP error (get)! Status: ${response.status}`);
             }
 
             console.log('Response from API:', response);
@@ -34,8 +34,67 @@ const Home = () => {
         }
     }
 
-    async function createPost(post) {
-        // ...
+    async function createPost() {
+        try {
+            const response = await fetch(POSTS_API, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json' // Add this header to specify JSON content
+                },
+                body: JSON.stringify({
+                    username: user,
+                    content: message
+                })
+            })
+
+            if (!response.ok) {
+                console.log(`HTTP error (post)! Status: ${response.status}`);
+            }
+
+            retrievePosts().then()
+            setMessage("")
+        } catch (error) {
+            console.error('Error creating post:', error);
+        }
+    }
+
+    async function login() {
+        if (!user) {
+            return
+        }
+
+        const getURL = `${USERS_API}?username=${user}`;
+        const getResponse = await fetch(getURL, {
+            method: "GET"
+        })
+
+        if (getResponse.ok) {
+            // User has been created before
+            setLoggedIn(true);
+            return;
+        }
+
+        const postResponse = await fetch(USERS_API + "/", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json' // Add this header to specify JSON content
+            },
+            body: JSON.stringify({
+                username: user
+            })
+        })
+
+        if (!postResponse.ok) {
+            console.log(`HTTP error (post)! Status: ${postResponse.status}`);
+        }
+
+        setLoggedIn(true);
+    }
+
+    function logout() {
+        setLoggedIn(false);
+        setUser("");
+        setMessage("");
     }
 
     useEffect(() => {retrievePosts().then()}, [])
@@ -45,10 +104,11 @@ const Home = () => {
             <div className="search-input">
                 {loggedIn ? (
                     <InputField
-                        title="Make a post"
+                        title={`Make a post, ${user}`}
                         value={message}
                         setValue={setMessage}
                         placeholder="Enter the message"
+                        enter={() => {createPost().then()}}
                     />
                 ) : (
                     <InputField
@@ -56,6 +116,7 @@ const Home = () => {
                         value={user}
                         setValue={setUser}
                         placeholder="Enter the username"
+                        enter={() => {login().then()}}
                     />
                 )}
 
@@ -65,16 +126,15 @@ const Home = () => {
                 {loggedIn ? (
                     <>
                         <ActionButton action={() => {
-                            createPost(message).then()
+                            createPost().then()
                         }} title="Post"/>
                         <ActionButton action={() => {
-                            setLoggedIn(false);
-                            setUser("");
+                            logout();
                         }} title="Log out"/>
                     </>
                 ) : (
                     <ActionButton action={() => {
-                        setLoggedIn(true);
+                        login().then()
                     }} title="Enter"/>
                 )}
             </div>

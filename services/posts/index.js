@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const app = express();
 
-const { readData } = require('./src/db');
+const { readData, writeData} = require('./src/db');
 
 app.use(express.json());
 
@@ -14,12 +14,8 @@ app.use(cors({
 }));
 
 
-app.get('/', (req, res) => {
-    res.status(200).send('Messages API');
-})
-
 app.get('/posts', (req, res) => {
-    console.log("Received in posts /posts")
+    console.log("Received in posts: get /posts")
 
     readData('messages')
         .then(data => {
@@ -29,6 +25,21 @@ app.get('/posts', (req, res) => {
             console.error(err);
             res.status(500).send({ error: 'Reading posts from DB error' });
         })
+})
+
+app.post('/posts', (req, res) => {
+    const post = req.body;
+    console.log("Received in posts: post / ", req.body)
+
+    try {
+        writeData('messages', post);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ error: 'Writing a post to DB error' });
+        return;
+    }
+
+    res.status(200).send({})
 })
 
 app.listen(port, () => {
