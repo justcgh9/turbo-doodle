@@ -1,21 +1,26 @@
 import React from 'react';
 import styled from "styled-components";
 
+export const hexToRgb = (hex) => {
+    hex = hex.replace(/^#/, '');
+
+    let r = parseInt(hex.slice(0, 2), 16);
+    let g = parseInt(hex.slice(2, 4), 16);
+    let b = parseInt(hex.slice(4, 6), 16);
+
+    return `${r}, ${g}, ${b}`;
+}
+
 const Card = (props) => {
     const interlocutorId = props.id
 
-    const hexToRgb = (hex) => {
-        hex = hex.replace(/^#/, '');
-
-        let r = parseInt(hex.slice(0, 2), 16);
-        let g = parseInt(hex.slice(2, 4), 16);
-        let b = parseInt(hex.slice(4, 6), 16);
-
-        return `${r}, ${g}, ${b}`;
-    }
-
     const handleClick = () => {
-
+        props.setPost({
+            content: props.post,
+            title: props.name,
+            color: props.color
+        })
+        props.setOpenForm(true);
     };
 
     const StyledCard = styled.div`

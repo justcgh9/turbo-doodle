@@ -2,7 +2,8 @@ import React, {useEffect, useState} from "react";
 import PostsList from "./components/PostsList.jsx";
 import InputField from "./components/InputField.jsx";
 import ActionButton from "./components/ActionButton.jsx";
-import {POSTS_API, USERS_API} from "./services";
+import {LIKES_API, POSTS_API, USERS_API} from "./services";
+import Post from "./components/Post.jsx";
 
 
 const Home = () => {
@@ -11,6 +12,15 @@ const Home = () => {
 
     const [posts, setPosts] = useState([]);
     const [message, setMessage] = useState("");
+
+    const [openForm, setOpenForm] = useState(false);
+    const [post, setPost] = useState({
+        title: "",
+        content: "",
+        color: ""
+    });
+
+    const [likes, setLikes] = useState([]);
 
     async function retrievePosts() {
         try {
@@ -34,12 +44,37 @@ const Home = () => {
         }
     }
 
+    async function retrieveLikes(messageId) {
+        try {
+            const getURL = `${USERS_API}?username=${user}&messageId=${messageId}`;
+            const response = await fetch(getURL, {
+                method: "GET",
+                headers: {}
+            });
+
+            if (!response.ok) {
+                console.log(`HTTP error (get)! Status: ${response.status}`);
+            }
+
+            console.log('Response from API:', response);
+
+            const data = await response.text();
+            console.log('Data from API:', data);
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    }
+
+    async function makeLike(messageId) {
+        // ...
+    }
+
     async function createPost() {
         try {
             const response = await fetch(POSTS_API, {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json' // Add this header to specify JSON content
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     username: user,
@@ -74,10 +109,10 @@ const Home = () => {
             return;
         }
 
-        const postResponse = await fetch(USERS_API + "/", {
+        const postResponse = await fetch(USERS_API, {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json' // Add this header to specify JSON content
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 username: user
@@ -102,6 +137,10 @@ const Home = () => {
     return (
         <div className="homeWrapper">
             <div className="search-input">
+                {openForm ? (
+                   <Post setOpenForm={setOpenForm} post={post}/>
+                ) : null}
+
                 {loggedIn ? (
                     <InputField
                         title={`Make a post, ${user}`}
@@ -131,6 +170,10 @@ const Home = () => {
                         <ActionButton action={() => {
                             logout();
                         }} title="Log out"/>
+
+                        {/*<ActionButton action={() => {*/}
+                        {/*    retrieveLikes(10).then();*/}
+                        {/*}} title="likes"/>*/}
                     </>
                 ) : (
                     <ActionButton action={() => {
@@ -141,7 +184,7 @@ const Home = () => {
 
 
                 <p>Posts</p>
-                <PostsList posts={posts}/>
+                <PostsList posts={posts} setPost={setPost} setOpenForm={setOpenForm}/>
             </div>
             )
             }

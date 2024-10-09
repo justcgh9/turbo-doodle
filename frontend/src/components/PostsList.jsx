@@ -2,7 +2,7 @@ import React from 'react';
 import Card from "./Card.jsx";
 
 const PostsList = (props) => {
-    const { posts } = props;
+    const { posts, setPost, setOpenForm } = props;
 
     const colorMap = {
         orange: 'FFA500FF',
@@ -32,6 +32,8 @@ const PostsList = (props) => {
                   name={item.username}
                   post={item.content}
                   color={getColor(item.username)}
+                  setPost={setPost}
+                  setOpenForm={setOpenForm}
               />
           ))}
       </div>
