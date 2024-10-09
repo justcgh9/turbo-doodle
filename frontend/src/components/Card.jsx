@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
+import like from '../images/like.svg'
 
 export const hexToRgb = (hex) => {
     hex = hex.replace(/^#/, '');
@@ -12,13 +13,13 @@ export const hexToRgb = (hex) => {
 }
 
 const Card = (props) => {
-    const interlocutorId = props.id
-
     const handleClick = () => {
         props.setPost({
             content: props.post,
             title: props.name,
-            color: props.color
+            color: props.color,
+            id: props.id,
+            liked: props.liked
         })
         props.setOpenForm(true);
     };
@@ -75,6 +76,9 @@ const Card = (props) => {
           <StyledCard color={props.color}>
               <h2>{props.name}</h2>
               <div className="postStyle">{props.post}</div>
+              {props.liked ? (
+                  <img src={like} alt="Like" className="likeClass"/>
+              ) : null}
           </StyledCard>
       </a>
   );

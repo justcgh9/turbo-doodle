@@ -27,6 +27,10 @@
     text-overflow: ellipsis;
 }
 
+.likeClass {
+    width: 20px;
+}
+
 @media only screen and (max-width: 800px) {
     .ChatCard {
         width: 30vw;
