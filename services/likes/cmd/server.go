@@ -38,6 +38,12 @@ func main() {
 		return
 	}
 
+	http.HandleFunc("OPTIONS /likes", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	})
+
 	http.HandleFunc("POST /likes", func(w http.ResponseWriter, r *http.Request) {
 		var req LikeReq
 		err := json.NewDecoder(r.Body).Decode(&req)
@@ -46,7 +52,6 @@ func main() {
 			ErrorResponse(w, http.StatusBadRequest, "invalid body")
 			return
 		}
-
 		_, err = db.Exec("INSERT INTO likes (username, message_id) VALUES ($1, $2)", req.Username, req.MessageId)
 		if err != nil {
 			slog.Error("main:", "error", err)
