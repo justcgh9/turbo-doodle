@@ -2,7 +2,7 @@ import React from 'react';
 
 const InputField = (props) => {
   return (
-      <div>
+      <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
           <p>{props.title}</p>
           <input
               onChange={(e) => props.setValue(e.target.value)}

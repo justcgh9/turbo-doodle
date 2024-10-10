@@ -22,6 +22,10 @@ const Home = () => {
         liked: false
     });
 
+    useEffect(() => {
+        setInterval(async () => await retrievePosts(), 3000)
+    }, [])
+
     const [likes, setLikes] = useState([]);
 
     async function retrievePosts() {
@@ -168,58 +172,61 @@ const Home = () => {
     }, [loggedIn]);
 
     return (
-        <div className="homeWrapper">
-            <div className="search-input">
-                {openForm ? (
-                   <Post setOpenForm={setOpenForm} post={post} makeLike={makeLike} loggedIn={loggedIn}/>
-                ) : null}
+        <div id="home">
+            <h1>Team 25</h1>
+            <div className="homeWrapper">
+                <div className="search-input">
+                    {openForm ? (
+                    <Post setOpenForm={setOpenForm} openForm={openForm} post={post} makeLike={makeLike} loggedIn={loggedIn}/>
+                    ) : null}
 
-                {loggedIn ? (
-                    <InputField
-                        title={`Make a post, ${user}`}
-                        value={message}
-                        setValue={setMessage}
-                        placeholder="Enter the message"
-                        enter={() => {createPost().then()}}
-                    />
-                ) : (
-                    <InputField
-                        title="Login"
-                        value={user}
-                        setValue={setUser}
-                        placeholder="Enter the username"
-                        enter={() => {login().then()}}
-                    />
-                )}
+                    {loggedIn ? (
+                        <InputField
+                            title={`Make a post, ${user}`}
+                            value={message}
+                            setValue={setMessage}
+                            placeholder="Enter the message"
+                            enter={() => {createPost().then()}}
+                        />
+                    ) : (
+                        <InputField
+                            title="Login"
+                            value={user}
+                            setValue={setUser}
+                            placeholder="Enter the username"
+                            enter={() => {login().then()}}
+                        />
+                    )}
 
-            </div>
+                </div>
 
-            <div className="postsTitle">
-                {loggedIn ? (
-                    <>
+                <div className="postsTitle">
+                    {loggedIn ? (
+                        <>
+                            <ActionButton action={() => {
+                                createPost().then()
+                            }} title="Post"/>
+                            <ActionButton action={() => {
+                                logout();
+                            }} title="Log out"/>
+                        </>
+                    ) : (
                         <ActionButton action={() => {
-                            createPost().then()
-                        }} title="Post"/>
-                        <ActionButton action={() => {
-                            logout();
-                        }} title="Log out"/>
-                    </>
-                ) : (
-                    <ActionButton action={() => {
-                        login().then()
-                    }} title="Enter"/>
-                )}
-            </div>
+                            login().then()
+                        }} title="Enter"/>
+                    )}
+                </div>
 
 
-                <p>Posts</p>
-                <PostsList
-                    posts={posts}
-                    setPost={setPost}
-                    setOpenForm={setOpenForm}
-                    likes={likes}
-                    username={user}
-                />
+                    <p>Posts</p>
+                    <PostsList
+                        posts={posts}
+                        setPost={setPost}
+                        setOpenForm={setOpenForm}
+                        likes={likes}
+                        username={user}
+                    />
+                </div>
             </div>
             )
             }

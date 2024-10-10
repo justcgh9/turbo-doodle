@@ -1,3 +1,15 @@
+#home {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 3rem;
+    gap: 2rem;
+}
+
+h1 {
+    font-size: 2rem;
+    margin: 0;
+}
+
 .homeWrapper {
     display: flex;
     flex-direction: column;
@@ -20,6 +32,6 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-
-    margin: 3rem;
+    padding: 0;
+    margin: 0;
 }

@@ -4,12 +4,12 @@ import {hexToRgb} from "./Card";
 
 const Post = (props) => {
 
-  const { post, setOpenForm, makeLike, loggedIn } = props;
+  const { post, openForm=false, setOpenForm, makeLike, loggedIn } = props;
 
   const [liked, setLiked] = useState(post.liked);
 
   const PostWrapper = styled.div`
-    width: 500px;
+    min-width: 500px;
 
     max-width: 80vw;
     /*height: 300px;*/
@@ -17,11 +17,11 @@ const Post = (props) => {
     box-shadow: unset;
 
     border-radius: 1rem;
-    padding: 10px;
+    padding: 1rem 2rem;
     
     background-color: ${(post.color)
-        ? `rgba(${hexToRgb(post.color)}, 0.73)`
-        : 'rgba(255, 255, 255, 0.63)'};
+        ? `rgba(${hexToRgb(post.color)}, ${openForm ? 1: 0.63})`
+        : `rgba(255, 255, 255, ${openForm ? 1: 0.63})`};
       
     h1, div {
         color: white;
